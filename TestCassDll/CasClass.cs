@@ -33,17 +33,17 @@ namespace TestCassDll
             return ReadAllPlus(server, port, true, Plu_No);
         }
 
-        public string MakeStr1252(int Number)
+        public string MakeStr1256(int Number)
         {
             byte[] intBytes = BitConverter.GetBytes(Number);
             return Encoding.GetEncoding(1256).GetString(intBytes, 0, intBytes.Length);
         }
-        public string MakeStr1252(short Number)
+        public string MakeStr1256(short Number)
         {
             byte[] intBytes = BitConverter.GetBytes(Number);
             return Encoding.GetEncoding(1256).GetString(intBytes, 0, intBytes.Length);
         }
-        public string MakeStr1252(byte Number)
+        public string MakeStr1256(byte Number)
         {
             byte[] intBytes = new byte[1];
             intBytes[0] = Number;
@@ -56,8 +56,10 @@ namespace TestCassDll
             string PackData="W02A";
             try
             {
-                TcpClient client = new TcpClient(server, port);
-                if (client == null)
+                var client = new TcpClient();
+                var result = client.BeginConnect(server, port, null, null);
+                var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(2));
+                if (!success)
                     return -1; // client is null !!!
                 else
                 {
@@ -69,22 +71,22 @@ namespace TestCassDll
                     PackData += "L";
                     PackData += PluData.PackLenght.ToString("X4");
                     PackData += ":";
-                    PackData = PackData + "F=01.57,2:" + MakeStr1252((short)PluData.DepartmentNo);
-                    PackData = PackData + "F=02.4C,4:" + MakeStr1252(PluData.PLU_No);
-                    PackData = PackData + "F=04.4D,1:" + MakeStr1252((byte)PluData.PLU_Type);
-                    PackData = PackData + "F=05.42,1:" + MakeStr1252((byte)PluData.Unit_Weight); 
-                    PackData = PackData + "F=06.4C,4:" + MakeStr1252(PluData.Unit_Price);
-                    PackData = PackData + "F=08.42,1:" + MakeStr1252((byte)PluData.TaxCode); 
-                    PackData = PackData + "F=09.57,2:" + MakeStr1252((short)PluData.Group_No);
-                    PackData = PackData + "F=0B.4C,4:" + MakeStr1252(Int32.Parse(PluData.Itemcode)); 
-                    PackData = PackData + "F=0C.42,1:" + MakeStr1252((byte)PluData.Tare_No);
-                    PackData = PackData + "F=0D.4C,4:" + MakeStr1252(PluData.TareValue);
-                    PackData = PackData + "F=50.57,2:" + MakeStr1252((short)PluData.Label_No);
-                    PackData = PackData + "F=51.57,2:" + MakeStr1252((short)PluData.Ax_Label_No);
-                    PackData = PackData + "F=55.57,2:" + MakeStr1252((short)PluData.Barcode_No);
-                    PackData = PackData + "F=56.57,2:" + MakeStr1252((short)PluData.Barcode2_No);
-                    PackData = PackData + "F=5A.42,1:" + MakeStr1252((byte)PluData.SaleMessage_No);
-                    PackData = PackData + "F=5B.42,4:" + MakeStr1252(PluData.Special_Price); 
+                    PackData = PackData + "F=01.57,2:" + MakeStr1256((short)PluData.DepartmentNo);
+                    PackData = PackData + "F=02.4C,4:" + MakeStr1256(PluData.PLU_No);
+                    PackData = PackData + "F=04.4D,1:" + MakeStr1256((byte)PluData.PLU_Type);
+                    PackData = PackData + "F=05.42,1:" + MakeStr1256((byte)PluData.Unit_Weight); 
+                    PackData = PackData + "F=06.4C,4:" + MakeStr1256(PluData.Unit_Price);
+                    PackData = PackData + "F=08.42,1:" + MakeStr1256((byte)PluData.TaxCode); 
+                    PackData = PackData + "F=09.57,2:" + MakeStr1256((short)PluData.Group_No);
+                    PackData = PackData + "F=0B.4C,4:" + MakeStr1256(Int32.Parse(PluData.Itemcode)); 
+                    PackData = PackData + "F=0C.42,1:" + MakeStr1256((byte)PluData.Tare_No);
+                    PackData = PackData + "F=0D.4C,4:" + MakeStr1256(PluData.TareValue);
+                    PackData = PackData + "F=50.57,2:" + MakeStr1256((short)PluData.Label_No);
+                    PackData = PackData + "F=51.57,2:" + MakeStr1256((short)PluData.Ax_Label_No);
+                    PackData = PackData + "F=55.57,2:" + MakeStr1256((short)PluData.Barcode_No);
+                    PackData = PackData + "F=56.57,2:" + MakeStr1256((short)PluData.Barcode2_No);
+                    PackData = PackData + "F=5A.42,1:" + MakeStr1256((byte)PluData.SaleMessage_No);
+                    PackData = PackData + "F=5B.42,4:" + MakeStr1256(PluData.Special_Price); 
                     PackData = PackData + "F=0A.53," + PluData.Name1.Length.ToString("X1") + ":"+PluData.Name1;
                     byte[] EncodeArray = Encoding.GetEncoding(1256).GetBytes(PackData);
                     PluData.PackLenght = EncodeArray.Length  - 18;
@@ -132,8 +134,10 @@ namespace TestCassDll
             {
                 try
                 {
-                    TcpClient client = new TcpClient(server, port);
-                    if (client == null)
+                    var client = new TcpClient();
+                    var result = client.BeginConnect(server, port, null, null);
+                    var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(2));
+                    if (!success )
                         return -1; // client is null !!!
                     else
                     {
@@ -179,9 +183,9 @@ namespace TestCassDll
         }
 
 
-        private int ConvertEncoding1252ToDecimal(string EncodeData)
+        private int ConvertEncoding1256ToDecimal(string EncodeData)
         {
-            byte[] EncodeArray = Encoding.GetEncoding(1252).GetBytes(EncodeData);
+            byte[] EncodeArray = Encoding.GetEncoding(1256).GetBytes(EncodeData);
             Array.Reverse(EncodeArray, 0, EncodeArray.Length);
             string HexStr = BitConverter.ToString(EncodeArray).Replace("-", "");
             return Int32.Parse(HexStr, System.Globalization.NumberStyles.HexNumber);
@@ -191,9 +195,9 @@ namespace TestCassDll
             
             int ChecksumIndex = 18;
             byte CalculatedChecksum = 0;
-            if (Encoding.GetEncoding(1252).GetString(data, 0, 13) == "W02AF4240,00L")
+            if (Encoding.GetEncoding(1256).GetString(data, 0, 13) == "W02AF4240,00L")
                 return -1;
-            if (Encoding.GetEncoding(1252).GetString(data, 0, 4) != "W02A")
+            if (Encoding.GetEncoding(1256).GetString(data, 0, 4) != "W02A")
                 return -2;
             if (data.Length < ChecksumIndex)
                 return -3;
@@ -218,7 +222,7 @@ namespace TestCassDll
                             "F=",
                             ":",
                           };
-                string BasePack = Encoding.GetEncoding(1252).GetString(data, 0, data.Length - 1);
+                string BasePack = Encoding.GetEncoding(1256).GetString(data, 0, data.Length - 1);
                 var DataCount = BasePack.Split(CountDelimiter, StringSplitOptions.RemoveEmptyEntries).Count() - 1;
                 var SplitedConfigs = BasePack.Split(ConfigDelimiters, StringSplitOptions.RemoveEmptyEntries);
                 var SplitedData = BasePack.Split(DataDelimiters, StringSplitOptions.RemoveEmptyEntries);
@@ -244,55 +248,55 @@ namespace TestCassDll
                     switch (SplitedFunc[0].ToUpper())
                     {
                         case "01.57":
-                            PluInfo.DepartmentNo = ConvertEncoding1252ToDecimal(SplitedData[DataCounter]);
+                            PluInfo.DepartmentNo = ConvertEncoding1256ToDecimal(SplitedData[DataCounter]);
                             break;
                         case "0A.53":
                             PluInfo.Name1 = SplitedData[DataCounter];
                             break;
                         case "0B.4C":
-                            PluInfo.Itemcode = ConvertEncoding1252ToDecimal(SplitedData[DataCounter]).ToString();
+                            PluInfo.Itemcode = ConvertEncoding1256ToDecimal(SplitedData[DataCounter]).ToString();
                             break;
                         case "06.4C":
-                            PluInfo.Unit_Price = ConvertEncoding1252ToDecimal(SplitedData[DataCounter]);
+                            PluInfo.Unit_Price = ConvertEncoding1256ToDecimal(SplitedData[DataCounter]);
                             break;
                         case "04.4D":
-                            PluInfo.PLU_Type = ConvertEncoding1252ToDecimal(SplitedData[DataCounter]);
+                            PluInfo.PLU_Type = ConvertEncoding1256ToDecimal(SplitedData[DataCounter]);
                             break;
                         case "02.4C":
-                            PluInfo.PLU_No = ConvertEncoding1252ToDecimal(SplitedData[DataCounter]);
+                            PluInfo.PLU_No = ConvertEncoding1256ToDecimal(SplitedData[DataCounter]);
                             break;
                         case "05.42":
-                            PluInfo.Unit_Weight = ConvertEncoding1252ToDecimal(SplitedData[DataCounter]);
+                            PluInfo.Unit_Weight = ConvertEncoding1256ToDecimal(SplitedData[DataCounter]);
                             break;
                         case "09.57":
-                            PluInfo.Group_No = ConvertEncoding1252ToDecimal(SplitedData[DataCounter]);
+                            PluInfo.Group_No = ConvertEncoding1256ToDecimal(SplitedData[DataCounter]);
                             break;
                         case "0D.4C":
-                            PluInfo.TareValue = ConvertEncoding1252ToDecimal(SplitedData[DataCounter]);
+                            PluInfo.TareValue = ConvertEncoding1256ToDecimal(SplitedData[DataCounter]);
                             break;
                         case "0C.42":
-                            PluInfo.Tare_No = ConvertEncoding1252ToDecimal(SplitedData[DataCounter]);
+                            PluInfo.Tare_No = ConvertEncoding1256ToDecimal(SplitedData[DataCounter]);
                             break;
                         case "08.42":
-                            PluInfo.TaxCode = ConvertEncoding1252ToDecimal(SplitedData[DataCounter]);
+                            PluInfo.TaxCode = ConvertEncoding1256ToDecimal(SplitedData[DataCounter]);
                             break;
                         case "51.57":
-                            PluInfo.Ax_Label_No = ConvertEncoding1252ToDecimal(SplitedData[DataCounter]);
+                            PluInfo.Ax_Label_No = ConvertEncoding1256ToDecimal(SplitedData[DataCounter]);
                             break;
                         case "56.57":
-                            PluInfo.Barcode2_No = ConvertEncoding1252ToDecimal(SplitedData[DataCounter]);
+                            PluInfo.Barcode2_No = ConvertEncoding1256ToDecimal(SplitedData[DataCounter]);
                             break;
                         case "5A.42":
-                            PluInfo.SaleMessage_No = ConvertEncoding1252ToDecimal(SplitedData[DataCounter]);
+                            PluInfo.SaleMessage_No = ConvertEncoding1256ToDecimal(SplitedData[DataCounter]);
                             break;
                         case "5B.42":
-                            PluInfo.Special_Price = ConvertEncoding1252ToDecimal(SplitedData[DataCounter]);
+                            PluInfo.Special_Price = ConvertEncoding1256ToDecimal(SplitedData[DataCounter]);
                             break;
                         case "55.57":
-                            PluInfo.Barcode_No = ConvertEncoding1252ToDecimal(SplitedData[DataCounter]);
+                            PluInfo.Barcode_No = ConvertEncoding1256ToDecimal(SplitedData[DataCounter]);
                             break;
                         case "50.57":
-                            PluInfo.Label_No = ConvertEncoding1252ToDecimal(SplitedData[DataCounter]);
+                            PluInfo.Label_No = ConvertEncoding1256ToDecimal(SplitedData[DataCounter]);
                             break;
                     }
                 }

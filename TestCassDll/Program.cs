@@ -63,9 +63,9 @@ namespace TestCassDll
 
 
             ////    int RetStatus = Scale.ReadAllPlus("192.168.5.102", 20304, false, 0);
-            int AllStatus = Scale.ReadAll("192.168.5.102", 20304);
-            int PluCountAvailabelInScale = Scale.AllPlu.Count();
-            int PluStatus = Scale.ReadPlu("192.168.5.102", 20304,2);
+            //int AllStatus = Scale.ReadAll("192.168.5.102", 20304);
+            //int PluCountAvailabelInScale = Scale.AllPlu.Count();
+            //int PluStatus = Scale.ReadPlu("192.168.5.102", 20304,2);
 
             Scale.PluData.Name1 = "سلام جیگر";
             Scale.PluData.PLU_No = 2;
