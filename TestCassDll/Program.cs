@@ -57,7 +57,9 @@ namespace TestCassDll
             Scale.PluData.Tare_No = 0;
             Scale.PluData.Itemcode = "10100";
 
-            Scale.WritePlu("192.168.5.102", 20304);
+            int Status = Scale.WritePlu("192.168.5.102", 20304);
+            Console.WriteLine("Status = {0}", Status);
+            Console.ReadKey();
         }
     }
 }
