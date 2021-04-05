@@ -8,14 +8,14 @@ namespace TestCassDll
 {
     public class Product
     {
-        public int id { get; set; }
+        private int id { get; set; }
         public int DepartmentNo { get; set; }
         public int PLU_No { get; set; }
         public int PLU_Type { get; set; }
         public string Itemcode { get; set; }
         public string Name1 { get; set; }
-        public string Name2 { get; set; }
-        public string Name3 { get; set; }
+        private string Name2 { get; set; }
+        private string Name3 { get; set; }
         public int Group_No { get; set; }
         public int Label_No { get; set; }
         public int Ax_Label_No { get; set; }
@@ -37,13 +37,7 @@ namespace TestCassDll
         public int Barcode_No { get; set; }
         public int Barcode2_No { get; set; }
         public bool Use_Fixed_Price_Type { get; set; }
-        public int PackLenght { get; set; }
-        public int ScaleID { get; set; }
-        public string PackIP { get; set; }
-        public int PackPort { get; set; }
-        public bool LockInfo { get; set; }
-        public byte ScaleServiceType { get; set; }
-        public int TableRow { get; set; }
+      
         public int TaxCode { get; set; }
         public int SaleMessage_No { get; set; }
     }

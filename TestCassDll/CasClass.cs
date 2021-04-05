@@ -4,22 +4,26 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using TestCassDll.Models;
 
 namespace TestCassDll
 {
     public class CasClass
     {
-        private byte[] Buffer = new byte[1024];
-
         public List<Product> AllPlu { get { return Plus; } set { } }
+        public ReceivedConfig ScaleConfigs { get { return _receivedConfig; } set { } }
+        public Product PluData { get { return PluInfo; } set { } }
+
         private List<Product> Plus = new List<Product>();
         private int ProcessStatus;
+        private byte[] Buffer = new byte[1024];
+        private Product PluInfo;
+        private ReceivedConfig _receivedConfig;
 
-        Product PluInfo;
-        public Product PluData { get { return PluInfo; } set {} }
         public CasClass()
         {
             PluInfo = new Product();
+            _receivedConfig = new ReceivedConfig();
             ProcessStatus = 0;
         }
 
@@ -59,6 +63,7 @@ namespace TestCassDll
                 var client = new TcpClient();
                 var result = client.BeginConnect(server, port, null, null);
                 var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(2));
+                int PackLenght = 0;
                 if (!success)
                     return -1; // client is null !!!
                 else
@@ -69,7 +74,7 @@ namespace TestCassDll
                     PackData += ",";
                     PackData += PluData.DepartmentNo.ToString("X2");
                     PackData += "L";
-                    PackData += PluData.PackLenght.ToString("X4");
+                    PackData += "0000";
                     PackData += ":";
                     PackData = PackData + "F=01.57,2:" + MakeStr1256((short)PluData.DepartmentNo);
                     PackData = PackData + "F=02.4C,4:" + MakeStr1256(PluData.PLU_No);
@@ -89,7 +94,7 @@ namespace TestCassDll
                     PackData = PackData + "F=5B.42,4:" + MakeStr1256(PluData.Special_Price); 
                     PackData = PackData + "F=0A.53," + PluData.Name1.Length.ToString("X1") + ":"+PluData.Name1;
                     byte[] EncodeArray = Encoding.GetEncoding(1256).GetBytes(PackData);
-                    PluData.PackLenght = EncodeArray.Length  - 18;
+                    PackLenght = EncodeArray.Length  - 18;
                     Array.Resize(ref EncodeArray, EncodeArray.Length + 1);
                     byte Chcksum = EncodeArray[18];
                     for (int Counter=19;Counter< EncodeArray.Length;Counter++)
@@ -97,9 +102,9 @@ namespace TestCassDll
 
                     EncodeArray[EncodeArray.Length - 1] = Chcksum;
 
-                    PluData.PackLenght = EncodeArray.Length - 19;
+                    PackLenght = EncodeArray.Length - 19;
 
-                    string LenghtStr= PluData.PackLenght.ToString("X4");
+                    string LenghtStr= PackLenght.ToString("X4");
 
                     ASCIIEncoding.ASCII.GetBytes(LenghtStr, 0, 4, EncodeArray, 13);
 
@@ -108,11 +113,11 @@ namespace TestCassDll
                     client.Close();
                 }
             }
-            catch (ArgumentNullException e)
+            catch (ArgumentNullException)
             {
                 return -2; // ArgumentNullException !!!
             }
-            catch (SocketException e)
+            catch (SocketException)
             {
                 return -3; // SocketException !!!
             }
@@ -165,11 +170,11 @@ namespace TestCassDll
                         client.Close();
                     }
                 }
-                catch (ArgumentNullException e)
+                catch (ArgumentNullException)
                 {
                     return -2; // ArgumentNullException !!!
                 }
-                catch (SocketException e)
+                catch (SocketException)
                 {
                     return -3; // SocketException !!!
                 }
@@ -227,18 +232,16 @@ namespace TestCassDll
                 var SplitedConfigs = BasePack.Split(ConfigDelimiters, StringSplitOptions.RemoveEmptyEntries);
                 var SplitedData = BasePack.Split(DataDelimiters, StringSplitOptions.RemoveEmptyEntries);
 
-                PluInfo.PLU_No = Int32.Parse(SplitedConfigs[0], System.Globalization.NumberStyles.HexNumber);
-                PluInfo.DepartmentNo = Int32.Parse(SplitedConfigs[1], System.Globalization.NumberStyles.HexNumber);
-                PluInfo.ScaleID = Int32.Parse(SplitedConfigs[3], System.Globalization.NumberStyles.HexNumber);
-                PluInfo.LockInfo = (Int32.Parse(SplitedConfigs[7], System.Globalization.NumberStyles.HexNumber)) > 0 ? true : false;
-                PluInfo.PackIP = String.Format("{0}.{1}.{2}.{3}",
+                _receivedConfig.ScaleID = Int32.Parse(SplitedConfigs[3], System.Globalization.NumberStyles.HexNumber);
+                _receivedConfig.LockInfo = (Int32.Parse(SplitedConfigs[7], System.Globalization.NumberStyles.HexNumber)) > 0 ? true : false;
+                _receivedConfig.PackIP = String.Format("{0}.{1}.{2}.{3}",
                     int.Parse(SplitedConfigs[9].Substring(0, 2), System.Globalization.NumberStyles.HexNumber),
                     int.Parse(SplitedConfigs[9].Substring(2, 2), System.Globalization.NumberStyles.HexNumber),
                     int.Parse(SplitedConfigs[9].Substring(4, 2), System.Globalization.NumberStyles.HexNumber),
                     int.Parse(SplitedConfigs[9].Substring(6, 2), System.Globalization.NumberStyles.HexNumber));
-                PluInfo.PackPort = Int32.Parse(SplitedConfigs[11], System.Globalization.NumberStyles.HexNumber);
-                PluInfo.ScaleServiceType = (byte)Int32.Parse(SplitedConfigs[13], System.Globalization.NumberStyles.HexNumber);
-                PluInfo.TableRow = Int32.Parse(SplitedConfigs[15], System.Globalization.NumberStyles.HexNumber);
+                _receivedConfig.PackPort = Int32.Parse(SplitedConfigs[11], System.Globalization.NumberStyles.HexNumber);
+                _receivedConfig.ScaleServiceType = (byte)Int32.Parse(SplitedConfigs[13], System.Globalization.NumberStyles.HexNumber);
+                _receivedConfig.TableRow = Int32.Parse(SplitedConfigs[15], System.Globalization.NumberStyles.HexNumber);
                 string SpFunc;
                 string[] SplitedFunc;
                 for (int LoopCnt = 0, DataCounter = 3; LoopCnt < DataCount; LoopCnt++, DataCounter += 2)
