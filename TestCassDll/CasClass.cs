@@ -32,22 +32,22 @@ namespace TestCassDll
             0x52,0x30,0x32,0x46,0x30,0x31,0x30,0x30,0x30,0x30,0x30,0x31,0x2c,0x30,0x30,0x0a,
         };
 
-        public int ReadPlu(string server, int port, int Plu_No)
+        private int ReadPlu(string server, int port, int Plu_No)
         {
             return ReadAllPlus(server, port, true, Plu_No);
         }
 
-        public string MakeStr1256(int Number)
+        private string MakeStr1256(int Number)
         {
             byte[] intBytes = BitConverter.GetBytes(Number);
             return Encoding.GetEncoding(1256).GetString(intBytes, 0, intBytes.Length);
         }
-        public string MakeStr1256(short Number)
+        private string MakeStr1256(short Number)
         {
             byte[] intBytes = BitConverter.GetBytes(Number);
             return Encoding.GetEncoding(1256).GetString(intBytes, 0, intBytes.Length);
         }
-        public string MakeStr1256(byte Number)
+        private string MakeStr1256(byte Number)
         {
             byte[] intBytes = new byte[1];
             intBytes[0] = Number;
