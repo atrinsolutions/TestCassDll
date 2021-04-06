@@ -32,7 +32,7 @@ namespace TestCassDll
             0x52,0x30,0x32,0x46,0x30,0x31,0x30,0x30,0x30,0x30,0x30,0x31,0x2c,0x30,0x30,0x0a,
         };
 
-        private int ReadPlu(string server, int port, int Plu_No)
+        public int ReadPlu(string server, int port, int Plu_No)
         {
             return ReadAllPlus(server, port, true, Plu_No);
         }

@@ -51,8 +51,10 @@ namespace TestCassDll
             //int PluStatus = Scale.ReadPlu("192.168.5.102", 20304,2);
 
             Scale.PluData.Name1 = "سیب لبنانی";
-            Scale.PluData.PLU_No = 1;
-            Scale.PluData.Unit_Price = 150000;
+            Scale.PluData.PLU_No = 2;
+            Scale.PluData.DepartmentNo = 1;
+            Scale.PluData.PLU_Type = 3;
+            Scale.PluData.Unit_Price = 16000;
             Scale.PluData.TareValue = 0;
             Scale.PluData.Tare_No = 0;
             Scale.PluData.Itemcode = "10100";
