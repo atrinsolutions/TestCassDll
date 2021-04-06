@@ -45,23 +45,46 @@ namespace TestCassDll
         static void Main(string[] args)
         {
 
+            Scale.ReadSale("192.168.5.137", 20304);
+            Scale.SendAck("192.168.5.102",20304);
+
             //int RetStatus = Scale.ReadAllPlus("192.168.5.102", 20304, false, 0);
             //int AllStatus = Scale.ReadAll("192.168.5.102", 20304);
             //int PluCountAvailabelInScale = Scale.AllPlu.Count();
             //int PluStatus = Scale.ReadPlu("192.168.5.102", 20304,2);
 
-            Scale.PluData.Name1 = "سیب لبنانی";
-            Scale.PluData.PLU_No = 2;
-            Scale.PluData.DepartmentNo = 1;
-            Scale.PluData.PLU_Type = 3;
-            Scale.PluData.Unit_Price = 16000;
-            Scale.PluData.TareValue = 0;
-            Scale.PluData.Tare_No = 0;
-            Scale.PluData.Itemcode = "10100";
+            //int RetStatus = Scale.ReadStore("192.168.5.102", 20304, 1);
+            //Console.WriteLine("\r\nStore ID = {0}", 1);
+            //Console.WriteLine("\r\nStore Name = {0}", Scale.StoreData.Name);
+            //Console.WriteLine("\r\nStore Phone = {0}", Scale.StoreData.Phone);
+            //Console.WriteLine("\r\nStore Description = {0}", Scale.StoreData.Description);
 
-            int Status = Scale.WritePlu("192.168.5.102", 20304);
-            Console.WriteLine("Status = {0}", Status);
-            Console.ReadKey();
+
+            //RetStatus = Scale.ReadStore("192.168.5.102", 20304, 2);
+            //Console.WriteLine("\r\nStore ID = {0}", 2);
+            //Console.WriteLine("\r\nStore Name = {0}", Scale.StoreData.Name);
+            //Console.WriteLine("\r\nStore Phone = {0}", Scale.StoreData.Phone);
+            //Console.WriteLine("\r\nStore Description = {0}", Scale.StoreData.Description);
+
+            //Scale.StoreData.Code = 1;
+            //Scale.StoreData.Description = "فروشگاه میوه های صادراتی";
+            //Scale.StoreData.Name = "هایپر میوه سمیعی";
+            //Scale.StoreData.Phone = "00989122607039";
+            //Scale.WriteStore("192.168.5.102", 20304);
+
+
+            //Scale.PluData.Name1 = "بستنی میهن";
+            //Scale.PluData.PLU_No = 1;
+            //Scale.PluData.DepartmentNo = 1;
+            //Scale.PluData.PLU_Type = 1;
+            //Scale.PluData.Unit_Price = 1200;
+            //Scale.PluData.TareValue = 0;
+            //Scale.PluData.Tare_No = 0;
+            //Scale.PluData.Itemcode = "10100";
+
+            //int Status = Scale.WritePlu("192.168.5.102", 20304);
+            //Console.WriteLine("Status = {0}", Status);
+            //Console.ReadKey();
         }
     }
 }

@@ -46,6 +46,8 @@
     <Compile Include="CasClass.cs" />
     <Compile Include="Models\Products.cs" />
     <Compile Include="Models\ReceivedConfig.cs" />
+    <Compile Include="Models\Sales.cs" />
+    <Compile Include="Models\Store.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
