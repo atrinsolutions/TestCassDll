@@ -12,12 +12,12 @@ namespace TestCassDll.Models
         public string Description { get; set; }
         public string Phone { get; set; }
         public string Name { get; set; }
-        public int PackLenght { get; set; }
-        public int ScaleID { get; set; }
-        public string PackIP { get; set; }
-        public int PackPort { get; set; }
-        public bool LockInfo { get; set; }
-        public byte ScaleServiceType { get; set; }
-        public int TableRow { get; set; }
+        public int Pack_Lenght { get; set; }
+        public int Scale_ID { get; set; }
+        public string Pack_IP { get; set; }
+        public int Pack_Port { get; set; }
+        public byte Lock_Info { get; set; }
+        public byte Scale_Service_Type { get; set; }
+        public int Row { get; set; }
     }
 }

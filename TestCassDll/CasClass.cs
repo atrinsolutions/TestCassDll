@@ -14,7 +14,6 @@ namespace TestCassDll
     {
         public List<Product> AllPlu { get { return Plus; } set { } }
         public List<Store> AllStore { get { return Stores; } set { } }
-        public ReceivedConfig ScaleConfigs { get { return _receivedConfig; } set { } }
         public Product PluData { get { return PluInfo; } set { } }
         public Store StoreData { get { return StoreInfo; } set { } }
 
@@ -27,7 +26,6 @@ namespace TestCassDll
         private byte[] Buffer = new byte[1024];
         private Product PluInfo;
         private Store StoreInfo;
-        private ReceivedConfig _receivedConfig;
         private Sales SalesRowData;
         private static PropertyInfo[] ProductProperties = typeof(Product).GetProperties();
         private static PropertyInfo[] StoreProperties = typeof(Store).GetProperties();
@@ -37,7 +35,6 @@ namespace TestCassDll
         {
             PluInfo = new Product();
             StoreInfo = new Store();
-            _receivedConfig = new ReceivedConfig();
             SalesRowData = new Sales();
             ProcessStatus = 0;
         }
@@ -524,9 +521,7 @@ namespace TestCassDll
 
         public int ReadSale(string host, int port)
         {
-            string Tempstring;
-            int SaleCounter;
-            bool DataAvailabel = true;
+
             int SalesBytesReceivd = 0;
             NetworkStream stream;
             TcpListener server = null;
@@ -587,15 +582,15 @@ namespace TestCassDll
                 string BasePack = Encoding.GetEncoding(1256).GetString(data, 0, BytesCount - 1);
                 var SplitedData = BasePack.Split(Delimiters, StringSplitOptions.RemoveEmptyEntries);
 
-                _receivedConfig.ScaleID = Int32.Parse(SplitedData[2], System.Globalization.NumberStyles.HexNumber);
-                _receivedConfig.LockInfo = (Int32.Parse(SplitedData[6], System.Globalization.NumberStyles.HexNumber)) > 0 ? true : false;
-                _receivedConfig.PackIP = String.Format("{0}.{1}.{2}.{3}",
+                StoreInfo.Scale_ID = Int32.Parse(SplitedData[2], System.Globalization.NumberStyles.HexNumber);
+                StoreInfo.Lock_Info = (byte)(Int32.Parse(SplitedData[6], System.Globalization.NumberStyles.HexNumber));
+                StoreInfo.Pack_IP = String.Format("{0}.{1}.{2}.{3}",
                     int.Parse(SplitedData[8].Substring(0, 2), System.Globalization.NumberStyles.HexNumber),
                     int.Parse(SplitedData[8].Substring(2, 2), System.Globalization.NumberStyles.HexNumber),
                     int.Parse(SplitedData[8].Substring(4, 2), System.Globalization.NumberStyles.HexNumber),
                     int.Parse(SplitedData[8].Substring(6, 2), System.Globalization.NumberStyles.HexNumber));
-                _receivedConfig.PackPort = Int32.Parse(SplitedData[10], System.Globalization.NumberStyles.HexNumber);
-                _receivedConfig.ScaleServiceType = (byte)Int32.Parse(SplitedData[12], System.Globalization.NumberStyles.HexNumber);
+                StoreInfo.Pack_Port = Int32.Parse(SplitedData[10], System.Globalization.NumberStyles.HexNumber);
+                StoreInfo.Scale_Service_Type = (byte)Int32.Parse(SplitedData[12], System.Globalization.NumberStyles.HexNumber);
                 StoreInfo.Name = SplitedData[14];
                 StoreInfo.Phone = SplitedData[16];
                 StoreInfo.Description = SplitedData[18];
@@ -639,16 +634,16 @@ namespace TestCassDll
                 var SplitedConfigs = BasePack.Split(ConfigDelimiters, StringSplitOptions.RemoveEmptyEntries);
                 var SplitedData = BasePack.Split(DataDelimiters, StringSplitOptions.RemoveEmptyEntries);
 
-                _receivedConfig.ScaleID = Int32.Parse(SplitedConfigs[3], System.Globalization.NumberStyles.HexNumber);
-                _receivedConfig.LockInfo = (Int32.Parse(SplitedConfigs[7], System.Globalization.NumberStyles.HexNumber)) > 0 ? true : false;
-                _receivedConfig.PackIP = String.Format("{0}.{1}.{2}.{3}",
+                PluInfo.Scale_ID = Int32.Parse(SplitedConfigs[3], System.Globalization.NumberStyles.HexNumber);
+                PluInfo.Lock_Info = (byte)(Int32.Parse(SplitedConfigs[7], System.Globalization.NumberStyles.HexNumber));
+                PluInfo.Pack_IP = String.Format("{0}.{1}.{2}.{3}",
                     int.Parse(SplitedConfigs[9].Substring(0, 2), System.Globalization.NumberStyles.HexNumber),
                     int.Parse(SplitedConfigs[9].Substring(2, 2), System.Globalization.NumberStyles.HexNumber),
                     int.Parse(SplitedConfigs[9].Substring(4, 2), System.Globalization.NumberStyles.HexNumber),
                     int.Parse(SplitedConfigs[9].Substring(6, 2), System.Globalization.NumberStyles.HexNumber));
-                _receivedConfig.PackPort = Int32.Parse(SplitedConfigs[11], System.Globalization.NumberStyles.HexNumber);
-                _receivedConfig.ScaleServiceType = (byte)Int32.Parse(SplitedConfigs[13], System.Globalization.NumberStyles.HexNumber);
-                _receivedConfig.TableRow = Int32.Parse(SplitedConfigs[15], System.Globalization.NumberStyles.HexNumber);
+                PluInfo.Pack_Port = Int32.Parse(SplitedConfigs[11], System.Globalization.NumberStyles.HexNumber);
+                PluInfo.Scale_Service_Type = (byte)Int32.Parse(SplitedConfigs[13], System.Globalization.NumberStyles.HexNumber);
+                PluInfo.Row = Int32.Parse(SplitedConfigs[15], System.Globalization.NumberStyles.HexNumber);
                 string SpFunc;
                 string[] SplitedFunc;
                 for (int LoopCnt = 0, DataCounter = 3; LoopCnt < DataCount; LoopCnt++, DataCounter += 2)
