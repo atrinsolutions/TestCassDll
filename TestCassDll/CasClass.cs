@@ -184,7 +184,7 @@ namespace TestCassDll
         }
 
 
-        private int ReadSomePlu(string server, int port, bool breakOnSpecialPlu, int Plu_No)
+        private int ReadSomePlu(string server, int port, bool breakOnSpecialPlu, int Plu_No,int Depart_No)
         {
             string Tempstring;
             int PluCounter;
@@ -209,20 +209,22 @@ namespace TestCassDll
                         stream.Write(RequestPluInfo, 0, RequestPluInfo.Length);
                         String responseData = String.Empty;
                         int BytesCount = stream.Read(Buffer, 0, Buffer.Length);
-                        ProcessStatus = ProcessRecivedPluData(Buffer, BytesCount);
+                        Product ReadProduct = new Product();
+                        ProcessStatus = ProcessRecivedPluData(ReadProduct,Buffer, BytesCount);
                         if (ProcessStatus == 1)
                         {
                             if (breakOnSpecialPlu == true)
                             {
-                                if (PluInfo.PLU_No == Plu_No)
+                                if (ReadProduct.PLU_No == Plu_No && ReadProduct.DepartmentNo== Depart_No)
                                 {
                                     DataAvailabel = false;
                                     IsDataTableEmpty = false;
+                                    PluInfo = ReadProduct;
                                 }
                             }
                             else
                             {
-                                Plus.Add(PluInfo);
+                                Plus.Add(ReadProduct);
                                 IsDataTableEmpty = false;
                             }
                         }
@@ -244,19 +246,17 @@ namespace TestCassDll
             }
             if (IsDataTableEmpty == true)
             {
-                foreach (PropertyInfo info in ProductProperties)
-                    info.SetValue(PluInfo, null);
                 return 2; // succeed : scale has no data
             }
             return 1; // succeed : scale has data 
         }
-        public int ReadPlu(string server, int port, int Plu_No)
+        public int ReadPlu(string server, int port, int Plu_No, int Depart_No)
         {
-            return ReadSomePlu(server, port, true, Plu_No);
+            return ReadSomePlu(server, port, true, Plu_No, Depart_No);
         }
         public int ReadAllPlus(string server, int port)
         {
-            return ReadSomePlu(server, port, false, 0);
+            return ReadSomePlu(server, port, false, 0,0);
         }
         public int WritePlu(string server, int port)
         {
@@ -353,7 +353,8 @@ namespace TestCassDll
                         stream.Write(RequestStoreInfo, 0, RequestStoreInfo.Length);
                         String responseData = String.Empty;
                         int BytesCount = stream.Read(Buffer, 0, Buffer.Length);
-                        ProcessStatus = ProcessRecivedStoreData(Buffer, BytesCount);
+                        Store Stor_Data = new Store();
+                        ProcessStatus = ProcessRecivedStoreData(Stor_Data, Buffer, BytesCount);
                         if (ProcessStatus == 1)
                         {
 
@@ -363,13 +364,14 @@ namespace TestCassDll
                                 {
                                     DataAvailabel = false;
                                     IsDataTableEmpty = false;
-                                    StoreInfo.Code = StoreCounter;
+                                    Stor_Data.Code = StoreCounter;
+                                    StoreInfo = Stor_Data;
                                 }
                             }
                             else
                             {
-                                StoreInfo.Code = StoreCounter;
-                                Stores.Add(StoreInfo);
+                                Stor_Data.Code = StoreCounter;
+                                Stores.Add(Stor_Data);
                                 IsDataTableEmpty = false;
                             }
                         }
@@ -392,8 +394,6 @@ namespace TestCassDll
             }
             if (IsDataTableEmpty == true)
             {
-                foreach (PropertyInfo info in StoreProperties)
-                    info.SetValue(StoreInfo, null);
                 return 2; // succeed : scale has no data
             }
             return 1; // succeed : scale has data 
@@ -553,7 +553,7 @@ namespace TestCassDll
             }
             return ProcessStatus;
         }
-        private short ProcessRecivedStoreData(byte[] data, int BytesCount)
+        private short ProcessRecivedStoreData(Store StoreInfo,byte[] data, int BytesCount)
         {
 
             int ChecksumIndex = 16;
@@ -597,7 +597,7 @@ namespace TestCassDll
             }
             return 1;
         }
-        private short ProcessRecivedPluData(byte[] data, int BytesCount)
+        private short ProcessRecivedPluData(Product PluInfo,byte[] data, int BytesCount)
         {
 
             int ChecksumIndex = 18;

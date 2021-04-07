@@ -45,15 +45,16 @@ namespace TestCassDll
         static void Main(string[] args)
         {
 
-            Scale.ReadSale("192.168.5.137", 20304);
-            Scale.SendAck("192.168.5.102",20304);
+            //Scale.ReadSale("192.168.5.137", 20304);
+            //Scale.SendAck("192.168.5.102",20304);
 
-            //int RetStatus = Scale.ReadAllPlus("192.168.5.102", 20304, false, 0);
+            //int RetStatus = Scale.ReadAllPlus("192.168.5.102", 20304);
             //int AllStatus = Scale.ReadAll("192.168.5.102", 20304);
             //int PluCountAvailabelInScale = Scale.AllPlu.Count();
-            //int PluStatus = Scale.ReadPlu("192.168.5.102", 20304,2);
+            int PluStatus = Scale.ReadPlu("192.168.5.102", 20304, 1, 1);
+            PluStatus = Scale.ReadPlu("192.168.5.102", 20304, 1, 2);
 
-            //int RetStatus = Scale.ReadStore("192.168.5.102", 20304, 1);
+            // int RetStatus = Scale.ReadStore("192.168.5.102", 20304,3);
             //Console.WriteLine("\r\nStore ID = {0}", 1);
             //Console.WriteLine("\r\nStore Name = {0}", Scale.StoreData.Name);
             //Console.WriteLine("\r\nStore Phone = {0}", Scale.StoreData.Phone);
