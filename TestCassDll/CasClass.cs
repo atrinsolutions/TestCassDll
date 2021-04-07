@@ -27,8 +27,6 @@ namespace TestCassDll
         private Products PluInfo;
         private Store StoreInfo;
         private Sales SalesRowData;
-        private static PropertyInfo[] ProductProperties = typeof(Products).GetProperties();
-        private static PropertyInfo[] StoreProperties = typeof(Store).GetProperties();
 
 
         public CasClass()
