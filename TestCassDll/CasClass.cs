@@ -12,28 +12,28 @@ namespace TestCassDll
 {
     public class CasClass
     {
-        public List<Product> AllPlu { get { return Plus; } set { } }
+        public List<Products> AllPlu { get { return Plus; } set { } }
         public List<Store> AllStore { get { return Stores; } set { } }
-        public Product PluData { get { return PluInfo; } set { } }
+        public Products PluData { get { return PluInfo; } set { } }
         public Store StoreData { get { return StoreInfo; } set { } }
 
 
 
         private List<String> SalesPackData = new List<String>();
-        private List<Product> Plus = new List<Product>();
+        private List<Products> Plus = new List<Products>();
         private List<Store> Stores = new List<Store>();
         private int ProcessStatus;
         private byte[] Buffer = new byte[1024];
-        private Product PluInfo;
+        private Products PluInfo;
         private Store StoreInfo;
         private Sales SalesRowData;
-        private static PropertyInfo[] ProductProperties = typeof(Product).GetProperties();
+        private static PropertyInfo[] ProductProperties = typeof(Products).GetProperties();
         private static PropertyInfo[] StoreProperties = typeof(Store).GetProperties();
 
 
         public CasClass()
         {
-            PluInfo = new Product();
+            PluInfo = new Products();
             StoreInfo = new Store();
             SalesRowData = new Sales();
             ProcessStatus = 0;
@@ -209,7 +209,7 @@ namespace TestCassDll
                         stream.Write(RequestPluInfo, 0, RequestPluInfo.Length);
                         String responseData = String.Empty;
                         int BytesCount = stream.Read(Buffer, 0, Buffer.Length);
-                        Product ReadProduct = new Product();
+                        Products ReadProduct = new Products();
                         ProcessStatus = ProcessRecivedPluData(ReadProduct,Buffer, BytesCount);
                         if (ProcessStatus == 1)
                         {
@@ -597,7 +597,7 @@ namespace TestCassDll
             }
             return 1;
         }
-        private short ProcessRecivedPluData(Product PluInfo,byte[] data, int BytesCount)
+        private short ProcessRecivedPluData(Products PluInfo,byte[] data, int BytesCount)
         {
 
             int ChecksumIndex = 18;

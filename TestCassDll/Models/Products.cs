@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TestCassDll
 {
-    public class Product
+    public class Products
     {
         public int DepartmentNo { get; set; }
         public int PLU_No { get; set; }
